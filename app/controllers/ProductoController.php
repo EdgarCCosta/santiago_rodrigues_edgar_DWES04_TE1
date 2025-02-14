@@ -47,16 +47,28 @@ class ProductoController
     // Actualizar un producto existente
     public function actualizarProducto($id)
     {
-        $data = json_decode(file_get_contents('php://input'), true);
+        $producto = $this->productoDAO->obtenerProductoByID($id);
+        if ($producto) {
+            $data = json_decode(file_get_contents('php://input'), true);
 
-        $productoActualizado = $this->productoDAO->actualizarProducto(
-            $id,
-            $data['nombre'],
-            $data['descripcion'],
-            $data['precio'],
-            $data['stock']
-        );
-        echo json_encode($productoActualizado);
+            $productoActualizado = $this->productoDAO->actualizarProducto(
+                $id,
+                $data['nombre'],
+                $data['descripcion'],
+                $data['precio'],
+                $data['stock']
+            );
+
+            if ($productoActualizado) {
+                echo json_encode($productoActualizado);
+            } else {
+                http_response_code(500); 
+                echo json_encode(['error' => 'Error al actualizar el producto']);
+            }
+        } else {
+            http_response_code(404); 
+            echo json_encode(['error' => 'Producto no encontrado']);
+        }
     }
 
     // Eliminar un producto

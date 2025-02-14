@@ -26,7 +26,7 @@ class PedidoController
             echo json_encode($pedido);
         } else {
             http_response_code(404); // Not Found
-            echo json_encode(['error' => 'Usuario no encontrado']);
+            echo json_encode(['error' => 'Pedido no encontrado']);
         }
     }
 
@@ -46,7 +46,9 @@ class PedidoController
 
     // Actualizar un pedido existente
     public function actualizarPedido($id)
-    {
+{
+    $pedido = $this->pedidoDAO->obtenerPedidoByID($id);
+    if ($pedido) {
         $data = json_decode(file_get_contents('php://input'), true);
 
         $pedidoActualizado = $this->pedidoDAO->actualizarPedido(
@@ -56,8 +58,17 @@ class PedidoController
             $data['cantidad'],
             $data['total'],
         );
+        if ($pedidoActualizado) {
             echo json_encode($pedidoActualizado);
+        } else {
+            http_response_code(500); 
+            echo json_encode(['error' => 'Error al actualizar el pedido']);
+        }
+    } else {
+        http_response_code(404); // Not Found
+        echo json_encode(['error' => 'Pedido no encontrado']);
     }
+}
 
     // Eliminar un pedido
     public function eliminarPedido($id)
