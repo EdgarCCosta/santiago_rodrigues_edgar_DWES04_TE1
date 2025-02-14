@@ -47,7 +47,6 @@ INSERT INTO usuarios (nombre, apellido, email, telefono) VALUES
 
 
 -- Insertar productos electrónicos
--- Insertar productos electrónicos
 INSERT INTO productos(nombre, descripcion, precio, stock)VALUES 
 ('Smartphone XYZ', 'Smartphone con pantalla de 6.5 pulgadas, cámara de 12 MP, batería de 4000 mAh', 299.99, 50),
 ('Laptop ABC', 'Laptop de 15.6 pulgadas, procesador i7, 16GB de RAM', 999.99,  30),

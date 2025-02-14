@@ -33,23 +33,24 @@ class ProductoDAO
     }
 
     public function obtenerProductoByID($id)
-    {
-        $connection = $this->db->getConnection();
-        $query = "SELECT * FROM productos WHERE id = ?";
-        $statement = $connection->prepare($query);
-        $statement->execute([$id]);
-        $fila = $statement->fetch(PDO::FETCH_ASSOC);
+{
+    $connection = $this->db->getConnection();
+    $query = "SELECT * FROM productos WHERE id = ?";
+    $statement = $connection->prepare($query);
+    $statement->execute([$id]);
+    $fila = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if ($fila) {
-            return new ProductoDTO(
+    if ($fila) {
+        return new ProductoDTO(
             $fila['id'],
             $fila['nombre'],
             $fila['descripcion'],
             $fila['precio'],
             $fila['stock']
-            );
-        }
+        );
     }
+    return null;
+}
 
     public function crearProducto($nombre, $descripcion, $precio, $stock)
     {

@@ -16,7 +16,7 @@ $router->add('PUT', '/DWES/v2/public/pedidos/{id}', 'PedidoController', 'actuali
 $router->add('DELETE', '/DWES/v2/public/pedidos/{id}', 'PedidoController', 'eliminarPedido');
 
 $router->add('GET', '/DWES/v2/public/productos', 'ProductoController', 'obtenerProductos');
-$router->add('GET', '/DWES/v2/public/producto/{id}', 'ProductoController', 'obtenerProductoByID');
+$router->add('GET', '/DWES/v2/public/productos/{id}', 'ProductoController', 'obtenerProductoByID');
 $router->add('POST', '/DWES/v2/public/productos', 'ProductoController', 'crearProducto');
 $router->add('PUT', '/DWES/v2/public/productos/{id}', 'ProductoController', 'actualizarProducto');
 $router->add('DELETE', '/DWES/v2/public/productos/{id}', 'ProductoController', 'eliminarProducto');

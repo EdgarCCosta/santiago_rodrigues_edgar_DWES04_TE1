@@ -19,16 +19,16 @@ class ProductoController
     }
 
     // Obtener un producto por ID
-    public function obtenerProducto($id)
-    {
-        $producto = $this->productoDAO->obtenerProducto($id);
-        if ($producto) {
-            echo json_encode($producto);
-        } else {
-            http_response_code(404); // Not Found
-            echo json_encode(['error' => 'Producto no encontrado']);
-        }
+    public function obtenerProductoByID($id)
+{
+    $producto = $this->productoDAO->obtenerProductoByID($id);
+    if ($producto) {
+        echo json_encode($producto);
+    } else {
+        http_response_code(404); // Not Found
+        echo json_encode(['error' => 'Producto no encontrado']);
     }
+}
 
     // Crear un nuevo producto
     public function crearProducto()
