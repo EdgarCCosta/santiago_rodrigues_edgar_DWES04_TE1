@@ -16,7 +16,7 @@ $router->add('PUT', '/DWES/v2/public/pedidos/{id}', 'PedidoController', 'actuali
 $router->add('DELETE', '/DWES/v2/public/pedidos/{id}', 'PedidoController', 'eliminarPedido');
 
 $router->add('GET', '/DWES/v2/public/productos', 'ProductoController', 'obtenerProductos');
-$router->add('GET', '/DWES/v2/public/productos/{id}', 'ProductoController', 'obtenerProductoByID');
+$router->add('GET', '/DWES/v2/public/producto/{id}', 'ProductoController', 'obtenerProductoByID');
 $router->add('POST', '/DWES/v2/public/productos', 'ProductoController', 'crearProducto');
 $router->add('PUT', '/DWES/v2/public/productos/{id}', 'ProductoController', 'actualizarProducto');
 $router->add('DELETE', '/DWES/v2/public/productos/{id}', 'ProductoController', 'eliminarProducto');
@@ -51,7 +51,7 @@ if ($routeMatch) {
             $data = json_decode(file_get_contents('php://input'), true);
 
             // Validar datos según el controlador y la acción
-            $validationErrors = $this->validateData($controllerName, $actionName, $data);
+            $validationErrors = validateData($controllerName, $actionName, $data);
             if (!empty($validationErrors)) {
                 http_response_code(400); // Bad Request
                 echo json_encode(['error' => 'Datos inválidos', 'details' => $validationErrors]);
@@ -59,12 +59,12 @@ if ($routeMatch) {
             }
 
             // Agregar los datos validados a los parámetros
-            $params['data'] = $data;
+            $params = array_merge($params, $data); // Cambio aquí
         }
 
         // Llamar al método del controlador con los parámetros
         if (method_exists($controller, $actionName)) {
-            call_user_func_array([$controller, $actionName], $params);
+            call_user_func_array([$controller, $actionName], array_values($params)); // Cambio aquí
         } else {
             http_response_code(404); // Not Found
             echo json_encode(['error' => 'Método no encontrado en el controlador']);

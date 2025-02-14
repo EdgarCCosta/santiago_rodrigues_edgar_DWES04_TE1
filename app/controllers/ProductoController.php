@@ -62,8 +62,14 @@ class ProductoController
     // Eliminar un producto
     public function eliminarProducto($id)
     {
-        $eliminado = $this->productoDAO->eliminarProducto($id);
-        echo json_encode(['eliminado' => $eliminado]);
+        $producto = $this->productoDAO->obtenerProductoByID($id);
+        if ($producto) {
+            $eliminado = $this->productoDAO->eliminarProducto($id);
+            echo json_encode(['eliminado' => $eliminado]);
+        } else {
+            http_response_code(404); // Not Found
+            echo json_encode(['error' => 'Producto no encontrado']);
+        }
     }
 }
 

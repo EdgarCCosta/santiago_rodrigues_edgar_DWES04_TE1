@@ -76,21 +76,38 @@ class PedidoDAO
         return $this->obtenerPedidoByID($connection->lastInsertId());
     }
 
-    public function actualizarPedido($id, $usuario_id, $producto_id, $cantidad, $total)    {
-        $connection = $this->db->getConnection();
+    public function actualizarPedido($id, $usuario_id, $producto_id, $cantidad, $total)
+{
+    $connection = $this->db->getConnection();
 
-        $query = "UPDATE pedidos SET usuario_id = ?, producto_id = ?, cantidad = ?, total = ? WHERE id = ?";
-        $statement = $connection->prepare($query);
-        $statement->execute([$usuario_id, $producto_id, $cantidad, $total, $id]);
-
-        return $this->obtenerPedidoByID($id);
+    // Verificar si el usuario existe
+    $usuarioDAO = new UsuarioDAO();
+    $usuario = $usuarioDAO->obtenerUsuarioByID($usuario_id);
+    if (!$usuario) {
+        throw new Exception("El usuario con ID $usuario_id no existe.");
     }
+
+    // Verificar si el producto existe
+    $productoDAO = new ProductoDAO();
+    $producto = $productoDAO->obtenerProductoByID($producto_id);
+    if (!$producto) {
+        throw new Exception("El producto con ID $producto_id no existe.");
+    }
+
+    // Actualizar el pedido
+    $query = "UPDATE pedidos SET usuario_id = ?, producto_id = ?, cantidad = ?, total = ? WHERE id = ?";
+    $statement = $connection->prepare($query);
+    $statement->execute([$usuario_id, $producto_id, $cantidad, $total, $id]);
+
+    return $this->obtenerPedidoByID($id);
+}
 
     public function eliminarPedido($id)    {
         $connection = $this->db->getConnection();
 
         $query = "DELETE FROM pedidos WHERE id = ?";
         $statement = $connection->prepare($query);
+        
         return $statement->execute([$id]);
     }
 }

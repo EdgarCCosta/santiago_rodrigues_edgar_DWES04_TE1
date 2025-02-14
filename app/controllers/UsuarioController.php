@@ -62,8 +62,14 @@ class UsuarioController
     // Eliminar un usuario
     public function eliminarUsuario($id)
     {
-        $eliminado = $this->usuarioDAO->eliminarUsuario($id);
-        echo json_encode(['eliminado' => $eliminado]);
+        $usuario = $this->usuarioDAO->obtenerUsuarioByID($id);
+        if ($usuario) {
+            $eliminado = $this->usuarioDAO->eliminarUsuario($id);
+            echo json_encode(['eliminado' => $eliminado]);
+        } else {
+            http_response_code(404); // Not Found
+            echo json_encode(['error' => 'Usuario no encontrado']);
+        }
     }
 }
 

@@ -31,38 +31,44 @@ class PedidoController
     }
 
     // Crear un nuevo pedido
-    public function crearPedido($usuario_id, $producto_id, $cantidad, $total)
+    public function crearPedido()
     {
-        try {
-            $nuevoPedido = $this->pedidoDAO->crearPedido($usuario_id, $producto_id, $cantidad, $total);
+        $data = json_decode(file_get_contents('php://input'), true);
+
+            $nuevoPedido = $this->pedidoDAO->crearPedido(
+                $data['usuario_id'],
+                $data['producto_id'],
+                $data['cantidad'],
+                $data['total'],
+            );
             echo json_encode($nuevoPedido);
-        } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['error' => $e->getMessage()]);
-        }
     }
 
     // Actualizar un pedido existente
-    public function actualizarPedido($id, $usuario_id, $producto_id, $cantidad, $total)
+    public function actualizarPedido($id)
     {
-        try {
-            $pedidoActualizado = $this->pedidoDAO->actualizarPedido($id, $usuario_id, $producto_id, $cantidad, $total);
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $pedidoActualizado = $this->pedidoDAO->actualizarPedido(
+            $id,
+            $data['usuario_id'],
+            $data['producto_id'],
+            $data['cantidad'],
+            $data['total'],
+        );
             echo json_encode($pedidoActualizado);
-        } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['error' => $e->getMessage()]);
-        }
     }
 
     // Eliminar un pedido
     public function eliminarPedido($id)
     {
-        try {
+        $pedido = $this->pedidoDAO->obtenerPedidoByID($id);
+        if ($pedido) {
             $eliminado = $this->pedidoDAO->eliminarPedido($id);
             echo json_encode(['eliminado' => $eliminado]);
-        } catch (Exception $e) {
-            http_response_code(400); // Bad Request
-            echo json_encode(['error' => $e->getMessage()]);
+        } else {
+            http_response_code(404); // Not Found
+            echo json_encode(['error' => 'Pedido no encontrado']);
         }
     }
 }
